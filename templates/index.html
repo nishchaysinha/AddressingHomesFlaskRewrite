@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>SummerProj</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+<script src="https://api.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v1.6.1/mapbox-gl.css" rel="stylesheet" />
+<style>
+	body { margin: 0; padding: 0; }
+	#map { position: absolute; top: 0; bottom: 0; width: 100%; };
+</style>
+</head>
+<body>
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.min.js"></script>
+<link
+rel="stylesheet"
+href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.css"
+type="text/css"
+/>
+<!-- Promise polyfill script required to use Mapbox GL Geocoder in IE 11 -->
+<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
+<style>
+.geocoder {
+z-index: 1;
+width: 50%;
+left: 50%;
+top: 20px;
+}
+.mapboxgl-ctrl-geocoder {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+
+margin-top: 10px;
+margin-left: 10px;
+border-radius: 20px;
+min-width: 100%;
+border-color: #222;
+border: solid;
+box-shadow: 5px 5px #222;
+}
+#info {
+    background: #fff;
+font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+float: right;
+display: block;
+position: relative;
+margin: 0px auto;
+height: max-content;
+width: 18vw;    
+padding: 10px;
+border-bottom-left-radius: 20px;
+border-top-left-radius: 20px;
+font-size: 16px;
+text-align: center;
+color: #222;
+border-color: #222;
+border: solid;
+box-shadow: 5px 5px #222;
+
+}
+
+.button {
+  border: none;
+  color: white;
+  text-align: center;
+  display: inline-block;
+  font-size: 20px;
+  cursor: pointer;
+  border-radius: 20px;
+  border: solid;
+  box-shadow: 5px 5px #222;
+}
+
+.button1 {
+  background-color: white;
+  color: black;
+
+}
+
+.button1:hover {
+  background-color: #ffa55f;
+  color: white;
+}
+
+.button1:focus
+{
+    background-color:rgb(255, 197, 71);
+}
+</style>
+
+<div id="map"></div>
+<div id="geocoder" class="geocoder"></div>
+<div id="info">
+    <div id="latlong"></div>
+    <div id="revG"></div>
+    <button id="balls" class="button button1" onclick="sendlatlng()">Add DataPoint</button>
+</div>
+
+ 
+<script>
+
+function sendlatlng(){
+    let latlng={
+        'lat':lat,
+        'lng':lng,
+    }
+    const request = new XMLHttpRequest()
+    request.open('POST', `/revg/${JSON.stringify(latlng)}`)
+    request.onload = () => {
+        const flaskMessage = request.responseText
+        console.log(flaskMessage)
+    }
+    request.send() 
+}
+
+mapboxgl.accessToken = '{{mapbox_access_token}}';
+var map = new mapboxgl.Map({
+container: 'map',
+style: 'mapbox://styles/mapbox/streets-v11',
+center: [-79.4512, 43.6568],
+zoom: 13
+});
+
+var marker = new mapboxgl.Marker();
+
+lat=''
+lng=''
+
+function add_marker (event) {
+  var coordinates = event.lngLat;
+  console.log('Lng:', coordinates.lng, 'Lat:', coordinates.lat);
+  marker.setLngLat(coordinates).addTo(map);
+  document.getElementById("latlong").innerText = ["Latitude: "+marker._lngLat.lat,"\nLongitude: "+marker._lngLat.lng];
+  lat=coordinates.lat
+  lng=coordinates.lng
+}
+
+map.on('click', add_marker);
+
+
+var geocoder = new MapboxGeocoder({
+accessToken: mapboxgl.accessToken,
+mapboxgl: mapboxgl
+
+});
+document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
+
+</script>
+</body>
+</html>
