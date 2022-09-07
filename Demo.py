@@ -21,7 +21,7 @@ def reverseGeocoder(lat,lng):
 
     else:
         browser = webdriver.Chrome(
-            executable_path="drivers/chromedriver", options=options)
+            executable_path="/usr/bin/chromedriver", options=options)
 
     # Obtain the Google Map URL
     url = "http://maps.google.com/maps?z=12&t=m&q=loc:"+lat+"+"+lng
