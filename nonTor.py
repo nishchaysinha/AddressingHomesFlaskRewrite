@@ -31,9 +31,5 @@ def reverseGeocoder(lat,lng):
     print(title.text)
     return title.text
 
-l=[[2.03309773, 45.32264565], [2.04079502, 45.30499841], [2.07687304, 45.25457644], [2.05326028, 45.29406460], [2.07376117, 45.26852418]]
 
-
-for i in l:
-    reverseGeocoder(str(i[0]), str(i[1]))
 
