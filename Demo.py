@@ -53,6 +53,7 @@ with open('Results.csv', 'w') as csvfile:
     csvwriter.writerow(fields) 
     csvwriter.writerows(rows)
 
+print("Success")
 
 
 
