@@ -34,26 +34,33 @@ def reverseGeocoder(lat,lng):
 
 i=0
 
-fields=['ID', 'Lat', 'Long', 'Address']
-rows=[]
 
-with open('Sample_lat_long.csv', mode='r') as file:
+
+fields=['FeatureID', 'AIM_Postal', 'AIM_Addres', 'Near_POI', 'Country', 'Admin_l1', 'Admin_l2', 'Direction', 'Street_Nm', 'Latitude', 'Longitude', 'Address']
+
+with open('Results.csv', 'w') as csvfile:
+                csvwriter = csv.writer(csvfile) 
+                csvwriter.writerow(fields)
+
+with open('Muscat_Data.csv', mode='r') as file:
     csvreader = csv.reader(file)
     for lines in csvreader:
         if lines[-1]=='':
-            lines[-1]=reverseGeocoder(str(lines[1]),str(lines[2]))
-            rows.append(lines)
+            lines[-1]=reverseGeocoder(str(lines[-3]),str(lines[-2]))
             i+=1
+
+            print("Publishing to File")
+
+            with open('Results.csv', 'a') as csvfile: 
+                csvwriter = csv.writer(csvfile) 
+                csvwriter.writerow(lines) 
+
+
+            print("Success")
+
             print(str(i)+" points complete")
 
-print("Publishing Files")
 
-with open('Results.csv', 'w') as csvfile: 
-    csvwriter = csv.writer(csvfile) 
-    csvwriter.writerow(fields) 
-    csvwriter.writerows(rows)
-
-print("Success")
 
 
 
